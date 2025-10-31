@@ -1,0 +1,139 @@
+:root {
+  /* Default Theme (Cyan/Violet) */
+  --color-primary-from: 34 211 238; /* cyan-400 */
+  --color-primary-to: 139 92 246; /* violet-500 */
+  --color-background: 15 23 42; /* slate-900 */
+  --pulse-glow-color: 0, 255, 255;
+  --pulse-glow-color-secondary: 139, 92, 246;
+}
+
+.theme-rust {
+  /* Rust Theme (Orange/Amber) */
+  --color-primary-from: 251 146 60; /* orange-400 */
+  --color-primary-to: 245 158 11; /* amber-500 */
+  --color-background: 41 37 36; /* stone-800 */
+  --pulse-glow-color: 251, 146, 60;
+  --pulse-glow-color-secondary: 245, 158, 11;
+}
+
+body {
+    background-color: rgb(var(--color-background));
+    transition: background-color 0.5s ease;
+}
+
+/* Helper classes to use CSS variables with Tailwind's opacity modifiers */
+.from-primary-from {
+    --tw-gradient-from: rgb(var(--color-primary-from)) var(--tw-gradient-from-position);
+    --tw-gradient-to: rgb(var(--color-primary-from)/0) var(--tw-gradient-to-position);
+    --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+}
+.to-primary-to {
+    --tw-gradient-to: rgb(var(--color-primary-to)) var(--tw-gradient-to-position);
+}
+.bg-background {
+    background-color: rgb(var(--color-background));
+}
+.from-background {
+    --tw-gradient-from: rgb(var(--color-background)) var(--tw-gradient-from-position);
+    --tw-gradient-to: rgb(var(--color-background)/0) var(--tw-gradient-to-position);
+    --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+}
+.via-background\/80 {
+    --tw-gradient-to: rgb(var(--color-background)/0) var(--tw-gradient-to-position);
+    --tw-gradient-stops: var(--tw-gradient-from), rgb(var(--color-background)/.8) var(--tw-gradient-via-position), var(--tw-gradient-to);
+}
+.focus\:ring-primary-from\/50:focus {
+    --tw-ring-color: rgb(var(--color-primary-from)/.5);
+}
+.hover\:bg-primary-from\/20:hover {
+    background-color: rgb(var(--color-primary-from)/.2);
+}
+.hover\:shadow-primary-from\/30:hover {
+    --tw-shadow-color: rgb(var(--color-primary-from)/.3);
+    --tw-shadow: var(--tw-shadow-colored);
+}
+
+/* Ripple Effect Styles */
+span.ripple {
+  position: absolute;
+  border-radius: 50%;
+  transform: scale(0);
+  animation: ripple 600ms linear;
+  background-color: rgba(255, 255, 255, 0.7);
+}
+
+@keyframes ripple {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+/* --- ANIMATIONS --- */
+@keyframes fadeIn-float {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-fade-in-float {
+  animation: fadeIn-float 0.7s ease-out forwards;
+  opacity: 0; /* Start as invisible */
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 15px rgba(var(--pulse-glow-color), 0.3), 0 0 5px rgba(var(--pulse-glow-color-secondary), 0.2);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(var(--pulse-glow-color), 0.6), 0 0 10px rgba(var(--pulse-glow-color-secondary), 0.4);
+  }
+}
+.animate-pulse-glow {
+  animation: pulse-glow 3s infinite ease-in-out;
+}
+
+@keyframes wave {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
+.animate-wave span {
+  display: inline-block;
+  animation: wave 1.5s infinite ease-in-out;
+}
+
+/* New animation for initial page load */
+@keyframes popup-fade-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+.animate-popup-fade-in {
+  animation: popup-fade-in 0.6s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+}
+
+/* Accessibility: Reduce motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .animate-pulse-glow, .animate-wave span, .animate-fade-in-float, .animate-popup-fade-in {
+    animation: none;
+    opacity: 1; /* Ensure elements are visible */
+    transform: none; /* Reset transforms */
+  }
+}
